@@ -1,0 +1,19 @@
+{
+  "light": [
+    {
+      "name": "Lampu 1",
+      "switch": true,
+      "id": 1
+    },
+    {
+      "name": "Lampu 2",
+      "switch": true,
+      "id": 2
+    },
+    {
+      "name": "Lampu 3",
+      "switch": true,
+      "id": 3
+    }
+  ]
+}
