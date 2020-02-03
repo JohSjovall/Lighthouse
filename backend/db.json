@@ -2,7 +2,7 @@
   "light": [
     {
       "name": "Lamppu 1",
-      "switch": true,
+      "switch": false,
       "id": 1
     },
     {
