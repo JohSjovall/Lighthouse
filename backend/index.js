@@ -1,29 +1,23 @@
 const express = require('express')
 const app = express()
+const cors = require('cors');
 const bodyParser = require('body-parser')
+const axios = require('axios')
+const url = require('./urls/url')
 
-app.use(bodyParser)
+app.use(bodyParser.json())
+app.use(cors())
 
-let lightList = [
-    {
-        "name": "Lamppu 1",
-        "switch": false,
-        "id": 1
-    },
-    {
-        "name": "Lamppu 2",
-        "switch": true,
-        "id": 2
-    },
-    {
-        "name": "Lamppu 3",
-        "switch": true,
-        "id": 3
-    }
-]
+let lightList = []
+
+axios
+.get(url.allUrl, url.token)
+.then(response => {
+    lightList = response.data
+})
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+    res.send('<h1>Lighthouse backend</h1>')
 })
 
 app.get('/lights', (req, res) => {
@@ -31,7 +25,7 @@ app.get('/lights', (req, res) => {
 })
 
 app.get('/lights/:id', (req, res) => {
-    const id = Number(req.params.id)
+    const id = req.params.id
     const lightOne = lightList.find(light => light.id === id)
     if(lightOne){
         res.json(lightOne)
@@ -40,18 +34,27 @@ app.get('/lights/:id', (req, res) => {
     }
 })
 
-app.patch('/lights/:id', (req, res)) => {
-    const light_id = Number(req.params.id)
+app.patch('/lights/:id', (req, res) => {
+    const light_id = req.params.id
+    const light_update = req.body
 
-    const light_update = res.body
-
+    if( (light_update.power == null || undefined)&&(light_update.britness == null || undefined) ){
+        return res.status(400).json({ error: "No data"})
+    }
     for(let light of lightList){
-        if(light.id == light_id){
-            if(light_update.name != null || undefined)
-                light.name = light_update.name
+        if(light.id === light_id){
+            light.power = light_update.power
+            light.britness = light_update.britness
+            axios
+            .put(url.baseUrl+light_id+url.state,light_update, url.token)
+            .then(response =>
+                res.status(response.status).send(response.data)
+            )
+            return null
         }
     }
-}
+    return res.status(400).json({ error: "wrong index"})
+})
 
 const PORT = 3001
 app.listen(PORT, () => {

@@ -2,13 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import Light from '../components/Light'
 
-const baseUrl = 'http://localhost:3001/light'
+const baseUrl = 'http://localhost:3001/lights'
 
 class Lighthouse extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            lights: []    
+            'lights': []
         }
         
     }
@@ -17,27 +17,25 @@ class Lighthouse extends React.Component {
         axios
             .get(baseUrl)
             .then(response => {
-                this.setState({lights: response.data})
+                this.setState({'lights': response.data})
             })
     }
     handelSwitch = (id) => {
         //const id = this.state.lights.map(light => light.id.toString()).indexOf(event.target.value)
         console.log(id)
         const lightL = this.state.lights.find(light => light.id === id)
-        console.log('painettu '+ lightL.name)
+        console.log('painettu '+ lightL.label)
 
-        if(lightL.switch){
-            console.log("ei")
-            this.state.lights.find(light => light.id === id).switch = false
+        if(lightL.power === 'on'){
+            console.log("off")
+            this.state.lights.find(light => light.id === id).power = 'off'
         }else{
             console.log("on")
-            this.state.lights.find(light => light.id === id).switch = true
+            this.state.lights.find(light => light.id === id).power = 'on'
         }
-        axios.put(`${baseUrl}/${id}`, {
-            "name": lightL.name,
-            "switch": this.state.lights.find(light => light.id === id).switch,
-            "id": lightL.id
-        })
+        this.state.lights.find(light => light.id === id).brightness = 1
+        const powerLamp = this.state.lights.find(light => light.id === id).power
+        axios.patch(`${baseUrl}/${id}`,{"power":powerLamp, "brightness": 1})
     }
     render(){
         return (
