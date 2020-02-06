@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Light from '../components/Light'
+import '../styles/lighthouse.css'
 
 const baseUrl = 'http://localhost:3001/lights'
 
@@ -20,30 +21,34 @@ class Lighthouse extends React.Component {
                 this.setState({"lights": response.data })
             })
     }
-    handelSwitch = (id) => {
+    handelSwitch = (event) => {
         //const id = this.state.lights.map(light => light.id.toString()).indexOf(event.target.value)
-        console.log(id)
-        const lightL = this.state.lights.find(light => light.id === id)
-        console.log('painettu '+ lightL.label)
+        console.log(event.target.value)
+        const lightL = this.state.lights.find(light => light.id === Number(event.target.value))
+        //console.log('painettu '+ lightL.label)
 
         if(lightL.power === 'on'){
             console.log("ei")
-            this.state.lights.find(light => light.id === id).power = 'off'
+            this.state.lights.find(light => light.id === Number(event.target.value)).power = 'off'
+            event.target.className = 'off'
         }else{
             console.log("on")
-            this.state.lights.find(light => light.id === id).power = 'on'
+            this.state.lights.find(light => light.id === Number(event.target.value)).power = 'on'
+            event.target.className = 'on'
         }
-        axios.patch(`${baseUrl}/${id}`, {
-            "power": this.state.lights.find(light => light.id === id).power
-        }).then(response => console.log(response.data))
+        axios.patch(`${baseUrl}/${event.target.value}`, {
+            "power": this.state.lights.find(light => light.id === Number(event.target.value)).power
+        }).then(response => response.data)
     }
     render(){
         return (
             <div>
-                <h1>Lighthouse</h1>
-                {this.state.lights.map(light=>
-                    <Light key={light.id} light={light} click={() => this.handelSwitch(light.id)}/>
-                )}
+                <div className='heder_name'>Lighthouse</div>
+                <div className='buttons'>
+                    {this.state.lights.map(light=>
+                        <Light key={light.id} light={light} click={this.handelSwitch}/>
+                    )}
+                </div>
             </div>
         )
     }
