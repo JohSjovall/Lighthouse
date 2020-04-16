@@ -1,34 +1,58 @@
-button{
-    height: 100%;
+div.button_area{
+    display: flex;
     width: 100%;
-    border-radius: 30em;
+    height: 5em;
+    max-width: 30em;
     margin: 1em;
+    border-radius: 30em;
+    box-shadow: 1px 3px 10px black;
+}
+button.action{
+    height: 100%;
+    width: 80%;
     background-color: transparent;
     background-repeat: no-repeat;
     border: 0.2em;
     cursor: pointer;
     overflow: hidden;
     outline: none;
-    padding: 1em 1.2em;
     font-size: 2em;
     color: black;
     font-family: 'Oswald', sans-serif;
-    box-shadow: 1px 3px 10px black;
-    max-width: 9em;
+    border-radius: 30em 0em 0em 30em;
 }
-.on{
+button.select{
+    height: 100%;
+    width: 20%;
+    background-color: rgb(0, 117, 212);
+    background-repeat: no-repeat;
+    border-radius: 0em 30em 30em 0em;
+    border: 0.2em;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    font-size: 1.2em;
+    text-align: center;
+    color: rgb(0, 74, 134);
+    font-family: 'Oswald', sans-serif;
+    border-left: 1px solid black;
+}
+button.action.on{
     background-color: #004C99;
     color: white;
     border: 0.2em;
 }
-.off{
+button.action.off{
     background-color: #990000;
     color: white;
     border: 0.2em;
 }
-.on:active{
+button.action.on:active{
     background-color: #001933;
 }
-.off:active{
+button.action.off:active{
     background-color: #660000;
+}
+button.select:active{
+    background-color: rgb(0, 84, 153);
 }
